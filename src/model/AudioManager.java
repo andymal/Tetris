@@ -30,17 +30,13 @@ public class AudioManager {
 	private AudioManager() {}
 	
 	public static void playGameOverSound() {
-		if (GameFrame.settingsPanel.effectsOn() && gameOver != null) {
-			gameOver.start();
-			gameOver.setFramePosition(0);
-		}
+		if (GameFrame.settingsPanel.effectsOn() && gameOver != null)
+			playEffect(gameOver);
 	}
 	
 	public static void playVictoryFanfare() {
-		if (GameFrame.settingsPanel.effectsOn() && victoryFanfare != null) {
-			victoryFanfare.start();
-			victoryFanfare.setFramePosition(0);
-		}
+		if (GameFrame.settingsPanel.effectsOn() && victoryFanfare != null)
+			playEffect(victoryFanfare);
 	}
 	
 	public static void playPauseSound() { playEffect(pause); }
