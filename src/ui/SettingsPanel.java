@@ -18,7 +18,6 @@ public class SettingsPanel extends JPanel {
 	public final static String[] DIFFICULTIES = {"Easy","Medium","Hard"};
 	
 	private JCheckBox ghostSquaresCbx = new JCheckBox("Ghost Squares", true);
-	private JCheckBox musicCbx = new JCheckBox("Music", true);
 	private JCheckBox soundEffectsCbx = new JCheckBox("Sound Effects", true);
 	private JCheckBox saveScoreCbx = new JCheckBox("Save Scores", true);
 	
@@ -40,25 +39,12 @@ public class SettingsPanel extends JPanel {
 		
 	};
 	
-	private ItemListener musicListener = new ItemListener() {
-		
-		public void itemStateChanged(ItemEvent e) {
-			
-			if (musicCbx.isSelected())
-				AudioManager.resumeCurrentSoundtrack();
-			else
-				AudioManager.stopCurrentSoundtrack();
-			
-		}
-		
-	};
-	
 	SettingsPanel() {
 		
-		setLayout(new GridLayout(5,1));
+		setLayout(new GridLayout(4,1));
 		setBorder(new TitledBorder("Settings"));
 		
-		for (JCheckBox x : new JCheckBox[]{ghostSquaresCbx, musicCbx, soundEffectsCbx, saveScoreCbx}) {
+		for (JCheckBox x : new JCheckBox[]{ghostSquaresCbx, soundEffectsCbx, saveScoreCbx}) {
 			add(x);
 			x.setFocusable(false);
 		}
@@ -71,25 +57,17 @@ public class SettingsPanel extends JPanel {
 	}
 	
 	public boolean ghostSquaresOn() { return ghostSquaresCbx.isSelected(); }
-	public boolean musicOn() { return musicCbx.isSelected(); }
 	public boolean effectsOn() { return soundEffectsCbx.isSelected(); }
 	public boolean saveScoreOn() { return saveScoreCbx.isSelected(); }
 	
 	int getDifficulty() { return difficultyList.getSelectedIndex(); }
 	
-	// Music checkbox gets its own unique enabling methods since it is enabled / disabled
-	// independently from the ghost squares checkbox in the MenuPanel class
-	void enableMusicCbxListener() { musicCbx.addItemListener(musicListener); }
-	void disableMusicCbxListener() { musicCbx.removeItemListener(musicListener); }
-	
 	void enableCbxListeners() {
 		ghostSquaresCbx.addItemListener(ghostSquaresListener);
-		enableMusicCbxListener();
 	}
 	
 	void disableCbxListeners() {
 		ghostSquaresCbx.removeItemListener(ghostSquaresListener);
-		disableMusicCbxListener();
 	}
 	
 	void enableDifficultyList() { difficultyList.setEnabled(true); }

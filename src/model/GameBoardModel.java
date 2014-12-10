@@ -148,13 +148,7 @@ public class GameBoardModel {
 		// Process level ups
 		while (linesCompleted >= level * LINES_PER_LEVEL[difficulty]) {
 			
-			AudioManager.stopCurrentSoundtrack();
 			level++;
-			
-			// If level is equal to 11 (game complete) victory jingle will
-			// be played (this is handled in the Controller class)
-			if (level != 11)
-				AudioManager.beginCurrentSoundtrack();
 			
 			// Used to signal the UI components to initiate level up functions
 			justLeveled = true;

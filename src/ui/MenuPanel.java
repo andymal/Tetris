@@ -71,8 +71,6 @@ public class MenuPanel extends JPanel {
 			
 			Controller.fallTimer.start();
 			
-			AudioManager.beginCurrentSoundtrack();
-			
 		}
 	
 	};
@@ -82,11 +80,7 @@ public class MenuPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			Controller.fallTimer.stop();
-			
-			// Don't allow sound to be turned on / off when game is paused
-			GameFrame.settingsPanel.disableMusicCbxListener();
-			
-			AudioManager.stopCurrentSoundtrack();			
+						
 			AudioManager.playPauseSound();
 			
 			GameFrame.gameBoardPanel.disablePieceMovementInput();;
@@ -105,12 +99,6 @@ public class MenuPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			Controller.fallTimer.start();
-			
-			// Re-enable sound to be turned on / off instantly on
-			// checkbox change
-			GameFrame.settingsPanel.enableMusicCbxListener();
-			
-			AudioManager.resumeCurrentSoundtrack();
 			
 			GameFrame.gameBoardPanel.enablePieceMovementInput();;
 			

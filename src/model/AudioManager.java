@@ -13,20 +13,6 @@ public class AudioManager {
 	// Used to obtain audio file resources
 	private static final Class<?> resources = new AudioManager().getClass();
 	
-	// Soundtrack for the game
-	private static final Clip[] soundtrack = {
-		getAudioClip("audio/soundtrack/tetris-theme.wav"),
-		getAudioClip("audio/soundtrack/bean-machine-1-4.wav"),
-		getAudioClip("audio/soundtrack/tetris-music-3.wav"),
-		getAudioClip("audio/soundtrack/metroid-kraid.wav"),
-		getAudioClip("audio/soundtrack/sonic-scrap-brain-zone.wav"),
-		getAudioClip("audio/soundtrack/chrono-trigger-bike-theme.wav"),
-		getAudioClip("audio/soundtrack/mega-man-dr-wily.wav"),
-		getAudioClip("audio/soundtrack/sonic-ice-cap-zone.wav"),
-		getAudioClip("audio/soundtrack/bean-machine-9-12.wav"),
-		getAudioClip("audio/soundtrack/chrono-trigger-final-battle.wav")
-	};
-	
 	// Non-looping soundtrack clips
 	private static final Clip gameOver = getAudioClip("audio/soundtrack/zelda-game-over.wav");
 	private static final Clip victoryFanfare = getAudioClip("audio/soundtrack/ff1-victory-fanfare.wav");
@@ -43,44 +29,15 @@ public class AudioManager {
 	
 	private AudioManager() {}
 	
-	// Used when you want to start the soundtrack from the beginning
-	public static void beginCurrentSoundtrack() {
-		
-		if (GameFrame.settingsPanel.musicOn() && soundtrack[GameBoardModel.getLevel()-1] != null) {
-			
-			// In case a new game is started before the victory jingle is finished
-			// from a previous game (rare occurrence, but possible)
-			if (victoryFanfare.isRunning())
-				victoryFanfare.stop();			
-			
-			soundtrack[GameBoardModel.getLevel()-1].setFramePosition(0);
-			soundtrack[GameBoardModel.getLevel()-1].loop(Clip.LOOP_CONTINUOUSLY);
-			
-		}
-		
-	}
-	
-	// Used when you want to resume playing the current soundtrack from where you left off
-	public static void resumeCurrentSoundtrack() {
-		if (GameFrame.settingsPanel.musicOn() && soundtrack[GameBoardModel.getLevel()-1] != null)
-			soundtrack[GameBoardModel.getLevel()-1].loop(Clip.LOOP_CONTINUOUSLY);
-	}
-	
-	// Used for both stopping and pausing
-	public static void stopCurrentSoundtrack() {
-		if (soundtrack[GameBoardModel.getLevel()-1] != null)
-			soundtrack[GameBoardModel.getLevel()-1].stop();
-	}
-	
 	public static void playGameOverSound() {
-		if (GameFrame.settingsPanel.musicOn() && gameOver != null) {
+		if (GameFrame.settingsPanel.effectsOn() && gameOver != null) {
 			gameOver.start();
 			gameOver.setFramePosition(0);
 		}
 	}
 	
 	public static void playVictoryFanfare() {
-		if (GameFrame.settingsPanel.musicOn() && victoryFanfare != null) {
+		if (GameFrame.settingsPanel.effectsOn() && victoryFanfare != null) {
 			victoryFanfare.start();
 			victoryFanfare.setFramePosition(0);
 		}
@@ -111,13 +68,6 @@ public class AudioManager {
 			effect.setFramePosition(0);
 		}
 
-	}
-	
-	// Iterates over all clips and resets their frame positions back to the start.
-	// Used upon game complete
-	public static void resetSoundtrackFramePositions() {
-		for (Clip c : soundtrack)
-			if (c != null) c.setFramePosition(0);
 	}
 	
 	// Returns a clip audio output device input line from the specified file string

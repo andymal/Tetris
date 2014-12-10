@@ -120,7 +120,6 @@ public class Controller {
 		GameFrame.gameBoardPanel.startClearAnimation();
 		
 		AudioManager.playVictoryFanfare();
-		AudioManager.resetSoundtrackFramePositions();
 		
 		// Disable all buttons. Start button is re-enabled after
 		// game complete animation finishes
@@ -141,11 +140,7 @@ public class Controller {
 
 		fallTimer.stop();
 		
-		// Change audio over to game over sound
-		AudioManager.stopCurrentSoundtrack();
 		AudioManager.playGameOverSound();
-		
-		AudioManager.resetSoundtrackFramePositions();
 		
 		GameFrame.scorePanel.flashGameOverMessage();
 		GameFrame.gameBoardPanel.startSpiralAnimation();
