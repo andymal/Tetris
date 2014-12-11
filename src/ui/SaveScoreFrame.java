@@ -36,13 +36,11 @@ public class SaveScoreFrame extends JFrame {
 			
 			if (name.getText().equals("")) {
 				saveStatus.setForeground(Color.RED);
-				saveStatus.setText("Error: you must enter a name to save your score.");
+				saveStatus.setText("Error: you must enter a name to save your score");
 				return;
 			}
 			
 			cachedName = name.getText();
-			
-			saveScore.setEnabled(false); // Doesn't make sense to allow user to save score again
 			
 			saveStatus.setForeground(Color.BLACK);
 			saveStatus.setText("Writing...");
@@ -59,6 +57,7 @@ public class SaveScoreFrame extends JFrame {
 				
 				saveStatus.setForeground(Color.GREEN);
 				saveStatus.setText("Score Saved!");
+				saveScore.setEnabled(false); // Doesn't make sense to allow user to save score again
 				cancel.setText("OK");
 				
 			}
