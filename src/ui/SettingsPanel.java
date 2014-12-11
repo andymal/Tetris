@@ -11,8 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import model.AudioManager;
-
 public class SettingsPanel extends JPanel {
 	
 	public final static String[] DIFFICULTIES = {"Easy","Medium","Hard"};
