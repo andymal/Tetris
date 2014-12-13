@@ -29,6 +29,37 @@ public class AudioManager {
 	
 	private AudioManager() {}
 	
+<<<<<<< HEAD
+=======
+	// Used when you want to start the soundtrack from the beginning
+	public static void beginCurrentSoundtrack() {
+		
+		if (GameFrame.settingsPanel.musicOn() && soundtrack[GameBoardModel.getLevel()-1] != null) {
+			
+			// In case a new game is started before the victory jingle is finished
+			// from a previous game (rare occurrence, but possible)
+			if (victoryFanfare.isRunning()) victoryFanfare.stop();			
+			
+			soundtrack[GameBoardModel.getLevel()-1].setFramePosition(0);
+			soundtrack[GameBoardModel.getLevel()-1].loop(Clip.LOOP_CONTINUOUSLY);
+			
+		}
+		
+	}
+	
+	// Used when you want to resume playing the current soundtrack from where you left off
+	public static void resumeCurrentSoundtrack() {
+		if (GameFrame.settingsPanel.musicOn() && soundtrack[GameBoardModel.getLevel()-1] != null)
+			soundtrack[GameBoardModel.getLevel()-1].loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
+	// Used for both stopping and pausing
+	public static void stopCurrentSoundtrack() {
+		if (soundtrack[GameBoardModel.getLevel()-1] != null)
+			soundtrack[GameBoardModel.getLevel()-1].stop();
+	}
+	
+>>>>>>> master
 	public static void playGameOverSound() {
 		if (GameFrame.settingsPanel.effectsOn() && gameOver != null)
 			playEffect(gameOver);
@@ -37,6 +68,17 @@ public class AudioManager {
 	public static void playVictoryFanfare() {
 		if (GameFrame.settingsPanel.effectsOn() && victoryFanfare != null)
 			playEffect(victoryFanfare);
+	}
+	
+	// For playing small effect sounds. Resets the clip back to the starting
+	// frame position after playing
+	private static void playEffect(Clip effect) {
+
+		if (GameFrame.settingsPanel.effectsOn() && effect != null) {
+			effect.start();
+			effect.setFramePosition(0);
+		}
+
 	}
 	
 	public static void playPauseSound() { playEffect(pause); }
@@ -55,6 +97,7 @@ public class AudioManager {
 	public static void playCWRotationSound() { playEffect(swipeUp); }
 	public static void playCCWRotationSound() { playEffect(swipeDown); }
 	
+<<<<<<< HEAD
 	// For playing small effect sounds. Resets the clip back to the starting
 	// frame position after playing
 	private static void playEffect(Clip effect) {
@@ -64,6 +107,13 @@ public class AudioManager {
 			effect.setFramePosition(0);
 		}
 
+=======
+	// Iterates over all clips and resets their frame positions back to the start.
+	// Used upon game complete
+	public static void resetSoundtrackFramePositions() {
+		for (Clip c : soundtrack)
+			if (c != null) c.setFramePosition(0);
+>>>>>>> master
 	}
 	
 	// Returns a clip audio output device input line from the specified file string
@@ -86,7 +136,7 @@ public class AudioManager {
 				return c;
 				
 			}
-			catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {}
+			catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {} // Munch
 			
 		}
 		

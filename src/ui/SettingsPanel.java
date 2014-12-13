@@ -13,6 +13,8 @@ import javax.swing.border.TitledBorder;
 
 public class SettingsPanel extends JPanel {
 	
+	// Public so it can be used to map int values to difficulty strings by other
+	// GUI classes and the DBComm class
 	public final static String[] DIFFICULTIES = {"Easy","Medium","Hard"};
 	
 	private JCheckBox ghostSquaresCbx = new JCheckBox("Ghost Squares", true);

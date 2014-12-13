@@ -38,7 +38,6 @@ public class MenuPanel extends JPanel {
 			// Clears all old score info from previous games
 			GameFrame.scorePanel.refreshScoreInfo();
 			
-			// Reset timer delay to default value
 			Controller.fallTimer.setDelay(GameBoardModel.INITIAL_TIMER_DELAY);
 			
 			// Sets initial pieces
@@ -132,13 +131,13 @@ public class MenuPanel extends JPanel {
 	void enablePauseButton() { pause.addActionListener(pauseButtonListener); }
 	void enableResumeButton() { resume.addActionListener(resumeButtonListener); }
 	void enableGiveUpButton() { giveUp.addActionListener(giveUpButtonListener); }
-	void enablehighScoresButton() { highScores.addActionListener(highScoresListener); }
+	void enableHighScoresButton() { highScores.addActionListener(highScoresListener); }
 	
 	void disableStartButton() { start.removeActionListener(startButtonListener); }
 	void disablePauseButton() { pause.removeActionListener(pauseButtonListener); }
 	void disableResumeButton() { resume.removeActionListener(resumeButtonListener); }
 	void disableGiveUpButton() { giveUp.removeActionListener(giveUpButtonListener); }
-	void disablehighScoresButton() { highScores.removeActionListener(highScoresListener); }
+	void disableHighScoresButton() { highScores.removeActionListener(highScoresListener); }
 	
 	MenuPanel() {
 		
@@ -161,7 +160,7 @@ public class MenuPanel extends JPanel {
 		}
 		
 		enableStartButton();
-		enablehighScoresButton();
+		enableHighScoresButton();
 		
 	}
 	
