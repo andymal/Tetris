@@ -24,11 +24,11 @@ import model.DBComm;
 
 public class HighScoreFrame extends JFrame {
 	
-	private static Integer cachedSelectedRecordCount = null;
-	private static Integer cachedSelectedDifficulty = null;
+	static Integer cachedSelectedRecordCount = null;
+	static Integer cachedSelectedDifficulty = null;
 	
 	private final static Object[] COLUMN_HEADERS = {
-		"Name", "Score", "Lines", "Level", "Difficulty"
+		"Rank", "Name", "Score", "Lines", "Level", "Difficulty"
 	};
 	
 	private final static Integer[] RECORD_COUNTS = {10,25,50,100};
@@ -42,7 +42,7 @@ public class HighScoreFrame extends JFrame {
 	private JButton jbtReturn = new JButton("Return");
 	private JTable table = new JTable();
 	
-	private JLabel dbErrors = new JLabel();
+	private JLabel dbErrors = new JLabel("");
 	
 	HighScoreFrame() {
 		
@@ -122,17 +122,19 @@ public class HighScoreFrame extends JFrame {
 			data = DBComm.getHighScoresData(numRecords, difficulty);
 		}
 		catch (ClassNotFoundException | SQLException e1) {
-			dbErrors.setText("  Error reaching database: " + e1.getMessage() + "  ");
+			dbErrors.setText("  Database error: " + e1.getMessage() + "  ");
 			return;
 		}
 			
 		// If this statement is reached there were no errors reaching the
-		// database, so clear error text in case it is still displaying
+		// database, so clear error text in case if it is still displaying
 		// an old error and then re-center and pack the frame (since the
 		// error text can stretch the frame)
-		dbErrors.setText(null);
-		pack();
-		setLocationRelativeTo(null);
+		if (!dbErrors.getText().equals("")) {
+			dbErrors.setText("");
+			pack();
+			setLocationRelativeTo(null);
+		}
 		
 		table.setModel(new DefaultTableModel(data, COLUMN_HEADERS));
 		

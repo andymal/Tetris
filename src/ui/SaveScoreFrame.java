@@ -20,7 +20,11 @@ import model.GameBoardModel;
 // Frame prompting the user whether they want to save their score
 public class SaveScoreFrame extends JFrame {
 	
+	public final static int NAME_LENGTH = 20;
+	
 	private static String cachedName = null;
+	
+	private JPanel buttonPanel;
 	
 	private JLabel attainedScore = new JLabel();
 	private JLabel saveStatus = new JLabel();
@@ -29,6 +33,7 @@ public class SaveScoreFrame extends JFrame {
 	
 	private JButton saveScore = new JButton("Save");
 	private JButton cancel = new JButton("Cancel");
+	private JButton highScores = new JButton("View High Scores");
 	
 	private ActionListener saveScoreListener = new ActionListener() {
 		
@@ -50,10 +55,11 @@ public class SaveScoreFrame extends JFrame {
 			
 			saveStatus.setForeground(Color.BLACK);
 			saveStatus.setText("Writing...");
-		
+			
+			int rank = 0;
 			try {
 				
-				DBComm.writeScore(
+				rank = DBComm.writeScore(
 					name.getText(),
 					GameBoardModel.getScore(),
 					GameBoardModel.getLevel(),
@@ -65,7 +71,7 @@ public class SaveScoreFrame extends JFrame {
 			catch (ClassNotFoundException | SQLException e1) {
 				
 				saveStatus.setForeground(Color.RED);
-				saveStatus.setText("  Error reaching database: " + e1.getMessage() + "  ");
+				saveStatus.setText("  Database error: " + e1.getMessage() + "  ");
 				
 				pack();
 				setLocationRelativeTo(null);
@@ -74,10 +80,12 @@ public class SaveScoreFrame extends JFrame {
 				
 			}
 			
-			saveStatus.setForeground(Color.GREEN);
-			saveStatus.setText("Score Saved!");
+			saveStatus.setForeground(new Color(40,180,65));
+			saveStatus.setText("Score Saved! Your rank: " + rank);
 			saveScore.setEnabled(false); // Doesn't make sense to allow user to save score again
-			cancel.setText("OK");
+			cancel.setText("Return");
+
+			buttonPanel.add(highScores);
 			
 			pack();
 			setLocationRelativeTo(null);
@@ -87,6 +95,14 @@ public class SaveScoreFrame extends JFrame {
 	};
 	
 	SaveScoreFrame() {
+		
+		// Validates name length
+		name.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (name.getText().length() > NAME_LENGTH)
+					name.setText(name.getText().substring(0, NAME_LENGTH));
+			}
+		});
 		
 		if (cachedName != null) name.setText(cachedName);
 		
@@ -106,7 +122,7 @@ public class SaveScoreFrame extends JFrame {
 		add(saveStatus);
 		
 		// Button panel for saving / canceling
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.add(saveScore);
 		buttonPanel.add(cancel);
 		add(buttonPanel);
@@ -117,6 +133,18 @@ public class SaveScoreFrame extends JFrame {
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+			}
+		});
+		
+		highScores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				HighScoreFrame.cachedSelectedRecordCount = 3;
+				HighScoreFrame.cachedSelectedDifficulty = 3;
+				
+				dispose();
+				new HighScoreFrame();
+				
 			}
 		});
 		
@@ -140,6 +168,8 @@ public class SaveScoreFrame extends JFrame {
 			}
 			
 		});
+		
+		
 		
 		FrameUtils.setIcon(this, "save-icon.png");
 		setTitle("Save Score");

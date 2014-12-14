@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import ui.SettingsPanel;
 
@@ -22,7 +23,8 @@ public class DBComm {
 		return DriverManager.getConnection("jdbc:mysql://" + DB_HOST_NAME + "/tetris", DB_USER, DB_PASS);
 	}
 	
-	public static void writeScore(String name, int score, int level, int lines, int difficulty) throws ClassNotFoundException, SQLException {
+	// Returns the rank for the new score
+	public static int writeScore(String name, int score, int level, int lines, int difficulty) throws ClassNotFoundException, SQLException {
 		
 		Connection conn = null;
 		
@@ -30,11 +32,23 @@ public class DBComm {
 				
 			conn = getConnection();
 			
-			conn.createStatement().executeUpdate(new StringBuilder()
+			Statement stmt = conn.createStatement();
+			
+			stmt.executeUpdate(new StringBuilder()
 				.append("insert into score ")
 				.append("(playerName, playerScore, playerLevel, playerLines, playerDifficulty) values ")
-				.append(String.format("('%s', %d, %d, %d, %d)", name, score, level, lines, difficulty))
-				.toString());
+				.append(String.format("('%s', %d, %d, %d, %d);", name, score, level, lines, difficulty))
+				.toString()
+			);
+			
+			ResultSet rank = stmt.executeQuery(new StringBuilder()
+				.append("select count(*) from score ")
+				.append("where playerScore >= " + score + ";")
+				.toString()
+			);
+			
+			rank.next();
+			return rank.getInt(1);
 			
 		}
 		finally {
@@ -54,27 +68,26 @@ public class DBComm {
 			
 			ResultSet scores = conn.createStatement().executeQuery(createScoresQuery(numScores, difficulty));
 			
-			// Obtain column count and use it to initialize object array
+			// Obtain column count and use it to initialize object array.
+			// Add 1 to make room for the "Rank" column
 			int colCount = scores.getMetaData().getColumnCount();
-			Object[][] data = new Object[numScores][colCount];
+			Object[][] data = new Object[numScores][colCount+1];
 			
 			// Populate data
-			while (scores.next()) {
+			for (int rank = 1; scores.next(); rank++) {
 				
 				int currentRow = scores.getRow()-1;
 				
-				// colCount-2 since difficulty / levels completed are handled separately
-				for (int col = 0; col < colCount-2; col++)
-					data[currentRow][col] = scores.getString(col+1);
+				data[currentRow][0] = rank;
+				data[currentRow][1] = scores.getString(1); // Name
+				data[currentRow][2] = scores.getString(2); // Score
+				data[currentRow][3] = scores.getString(3); // Lines
 				
 				int level = scores.getInt(4);				
 				int diff = scores.getInt(5);
 				
-				// Level
-				data[currentRow][3] = level == 11 ? "Complete" : level;
-				
-				// Difficulty
-				data[currentRow][4] = SettingsPanel.DIFFICULTIES[diff];
+				data[currentRow][4] = level == 11 ? "Complete" : level; // Level
+				data[currentRow][5] = SettingsPanel.DIFFICULTIES[diff]; // Difficulty
 				
 			}
 			
@@ -99,7 +112,7 @@ public class DBComm {
 		if (difficulty != 3) query.append("where playerDifficulty = " + difficulty + " ");
 		
 		// Ordering and record count limiting
-		query.append("order by playerScore desc limit " + numScores);
+		query.append("order by playerScore desc limit " + numScores + ";");
 		
 		return query.toString();
 		

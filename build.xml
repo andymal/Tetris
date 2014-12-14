@@ -5,7 +5,7 @@
 <project name="Tetris" default="clean">
 	
 	<property environment="env"/> <!-- Sets the string to use to access environment variables -->
-	<property name="jar.deploy.path" value="${env.USERPROFILE}/desktop"/>
+	<property name="jar.deploy.path" value="${env.USERPROFILE}/Desktop"/>
 	<property name="src.dir" value="src"/>
 	<property name="build.dir" value="build"/>
 	<property name="lib.dir" value="lib"/>
@@ -25,7 +25,7 @@
 	</target>
 	
 	<target name="jar" description="Creates jar file" depends="compile, add-external-resources">
-		<jar basedir="${build.dir}" destfile="${jar.deploy.path}/tetris.jar" includes="**/*">
+		<jar basedir="${build.dir}" destfile="${jar.deploy.path}/tetris.jar" includes="**">
 			<zipgroupfileset dir="${lib.dir}" includes="*.jar" /> <!-- Includes DB driver classes from mysql jar -->
 			<manifest>
 				<attribute name="Main-class" value="ui.Main"/>
