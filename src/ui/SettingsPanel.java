@@ -45,7 +45,7 @@ public class SettingsPanel extends JPanel {
 		setLayout(new BorderLayout());
 		setBorder(new TitledBorder("Settings"));
 		
-		JPanel checkboxes = new JPanel(new GridLayout(4,1));
+		JPanel checkboxes = new JPanel(new GridLayout(3,1));
 		for (JCheckBox x : new JCheckBox[]{ghostSquaresCbx, soundEffectsCbx, saveScoreCbx}) {
 			checkboxes.add(x);
 			x.setFocusable(false);
